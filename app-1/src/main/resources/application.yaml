@@ -1,0 +1,37 @@
+server.port: 8080
+
+spring:
+  application:
+    name: app-1
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
+
+management:
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    prometheus:
+      enabled: true
+    circuitbreakers:
+      enabled: true
+    ratelimiters:
+      enabled: true
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        slidingWindowSize: 100
+        permittedNumberOfCallsInHalfOpenState: 50
+        slowCallDurationThreshold: 5s
+        slowCallRateThreshold: 90
+        failureRateThreshold: 50
+        waitDurationInOpenState: 5s
+        minimumNumberOfCalls: 10
